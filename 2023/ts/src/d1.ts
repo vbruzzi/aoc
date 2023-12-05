@@ -1,4 +1,4 @@
-import getInput, { testInput } from "./input/p1";
+import getInput, { testInput } from "./input/d1";
 
 type WordTrie = {
   children: { [key: string]: WordTrie };
