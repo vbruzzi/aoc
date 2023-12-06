@@ -24,15 +24,15 @@ function getNumForwards(row: string, startIdx: number): string {
   return num;
 }
 
-function getNumFromRow(row: string, startIdx: number): number {
+function getNumFromRow(row: string, startIdx: number): number[] {
   const forward = getNumForwards(row, startIdx + 1);
   const backward = getNumBackwards(row, startIdx - 1);
   // there is a num in the middle, meaning this row has at most 1 adjacent num
   if (nums.has(row[startIdx])) {
-    return +(backward + row[startIdx] + forward);
+    return [+(backward + row[startIdx] + forward)];
   }
 
-  return +forward + +backward;
+  return [+forward, +backward];
 }
 
 function solve(): number {
@@ -43,27 +43,35 @@ function solve(): number {
     const row = input[i];
     for (let j = 0; j < row.length; j++) {
       const char = row[j];
-      if (char === "." || nums.has(char)) {
+      if (char !== "*") {
         continue;
       }
-      console.log(char);
+
+      let cur: number[] = [];
+
       // up
       if (i > 0) {
-        total += getNumFromRow(input[i - 1], j);
+        cur.push(...getNumFromRow(input[i - 1], j));
       }
       // down
       if (i < input.length - 1) {
-        total += getNumFromRow(input[i + 1], j);
+        cur.push(...getNumFromRow(input[i + 1], j));
       }
 
       // back
       if (j > 0) {
-        total += +getNumBackwards(row, j - 1);
+        cur.push(+getNumBackwards(row, j - 1));
       }
 
       // forward
       if (j < row.length - 1) {
-        total += +getNumForwards(row, j + 1);
+        cur.push(+getNumForwards(row, j + 1));
+      }
+
+      // +'' is 0
+      cur = cur.filter((c) => c !== 0);
+      if (cur.length === 2) {
+        total += cur[0] * cur[1];
       }
     }
   }
