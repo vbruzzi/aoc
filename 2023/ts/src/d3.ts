@@ -71,6 +71,7 @@ function solve(): number {
       // +'' is 0
       cur = cur.filter((c) => c !== 0);
       if (cur.length === 2) {
+        console.log(cur);
         total += cur[0] * cur[1];
       }
     }
